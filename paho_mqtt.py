@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import requests
 import time
+import sys
 from datetime import datetime
 
 cloud_api_url = "https://praeklimatud%40gmail.com:praeklima_tud@2021@home.myopenhab.org/rest/items/"
@@ -35,10 +36,15 @@ column = ['casenio/event/f8f005d87424/7/1/JSON', 'casenio/event/f8f005d87424/8/1
           'casenio/event/f8f005d87424/21/11/JSON', 'casenio/event/f8f005d87424/21/200/JSON',
           'casenio/event/f8f005d87424/21/203/JSON', 'casenio/event/f8f005d87424/21/5/JSON',
           'casenio/event/f8f005d87424/21/3/JSON', 'casenio/event/f8f005d87424/21/1/JSON',
-          'casenio/event/f8f005d87424/21/6/JSON','casenio/event/f8f005d87424/23/12/JSON', 
+          'casenio/event/f8f005d87424/21/6/JSON', 'casenio/event/f8f005d87424/24/9/JSON',
+          'casenio/event/f8f005d87424/24/11/JSON', 'casenio/event/f8f005d87424/24/200/JSON',
+          'casenio/event/f8f005d87424/24/203/JSON', 'casenio/event/f8f005d87424/24/5/JSON',
+          'casenio/event/f8f005d87424/24/3/JSON', 'casenio/event/f8f005d87424/24/1/JSON',
+          'casenio/event/f8f005d87424/24/6/JSON', 'casenio/event/f8f005d87424/23/12/JSON', 
           'casenio/event/f8f005d87424/23/202/JSON', 'casenio/event/f8f005d87424/23/602/JSON',
           'casenio/event/f8f005d87424/25/1/JSON', 'casenio/event/f8f005d87424/26/1/JSON',
-          'casenio/event/f8f005d87424/27/1/JSON']
+          'casenio/event/f8f005d87424/27/1/JSON', 
+          'casenio/event/f8f005d87424/39/4/JSON', 'casenio/event/f8f005d87424/39/200/JSON']
 
 # Openhab items, where the MQTT topics data is to be stored on Openhab items, "place the list in the same order as MQTT topics"
 openhab_item_names = ['sensor1_temperature', 'sensor2_temperature', 'sensor3_temperature',
@@ -67,10 +73,12 @@ openhab_item_names = ['sensor1_temperature', 'sensor2_temperature', 'sensor3_tem
                       'Weather_Station_Air_Pressure_1', 'Weather_Station_Dew_Point_1',
                       'Weather_Station_Electricity_meter_1',
                       'Weather_Station_Heat_meter_1', 'Weather_Station_Humidity_1', 'Weather_Station_Luminance_1',
-                      'Weather_Station_Temperature_1', 'Weather_Station_Wind_Speed_1',
+                      'Weather_Station_Temperature_1', 'Weather_Station_Wind_Speed_1','Weather_Station_Air_Pressure_2', 'Weather_Station_Dew_Point_2',
+                      'Weather_Station_Electricity_meter_2',
+                      'Weather_Station_Heat_meter_2', 'Weather_Station_Humidity_2', 'Weather_Station_Luminance_2',
+                      'Weather_Station_Temperature_2', 'Weather_Station_Wind_Speed_2',
                       'Rain_Sensor_Precipitation_2', 'Rain_Sensor_Water_Meter_2', 'Rain_Sensor_Battery_2',
-                      'Temperature_25', 'Temperature_26', 'Temperature_27', 'Ventilation_Flap_switch',
-                      'Window_blinds', 'Window_opening_angle']
+                      'Temperature_25', 'Temperature_26', 'Temperature_27', 'wind_sensor_power', 'wind_sensor_energy' ]
 
 actuators = ['Ventilation_Flap_switch', 'Socket_Switch_1', 'Socket_Switch_2', 'Socket_Switch_3', 'Socket_Switch_4','Brightness_Sensor_Motion_detection_1', 'Brightness_Sensor_Motion_detection_2']
 
@@ -94,10 +102,48 @@ payload = 0
 # Callback Definition: subscribed topics data will be received and will commit that data to the respective openhab item
 def on_message(client, userdata, msg):
     global payload
-    # print("Received message: " + msg.topic + " -> " + msg.payload.decode("utf-8"))
+    now = datetime.now()
+    sys.stdout.write("\r")
+    print(now.strftime("%Y-%m-%d %H:%M:%S"), end='', flush=True)
+    
+#     print("Received message: " + msg.topic + " -> " + msg.payload.decode("utf-8"))
+    if msg.topic == 'casenio/event/f8f005d87424/39/15/JSON':
+        payload_received = msg.payload.decode("utf-8")
+        #print(payload_received)
+        for j in range(7, len(payload_received)):
+            if payload_received[j] == ',':
+                    # print(i)
+                    # print(payload_received[7:i])
+                payload = payload_received[7:j]
+                break
+        for i in range (53, len(payload_received)):
+            if(payload_received[i:i+4] == "rssi"):
+                if payload_received[i+6] == '6':
+                    url = localhost_url + 'wind_sensor_channel_6'
+                                                        
+                elif payload_received[i+6] == '7':
+                    url = localhost_url + 'wind_sensor_channel_7'
+                                
+                elif payload_received[i+6] == '8':
+                    url = localhost_url + 'wind_sensor_channel_8'
+                        
+                elif payload_received[i+6] == '9':
+                    url = localhost_url + 'wind_sensor_channel_9'
+                        
+                elif payload_received[i+6] == '0':
+                    url = localhost_url + 'wind_sensor_channel_0'
+                            
+                headers = {'Content-type': 'text/plain', 'Accept': 'application/json'}                
+                status = requests.post(url, headers=headers, data=payload)
+                #  uprint(openhab_item_names[i] + " set to " + payload + ": " + str(status))
+                status_str = str(status)
+                if status_str[len(status_str) - 5:len(status_str) - 2] != "200":
+                    print(openhab_item_names[i] + " set to " + payload + ": " + str(status))
+                                # print("Error status is " + str(status_str))
     for i in range(len(column)):
         if msg.topic == column[i]:
             payload_received = msg.payload.decode("utf-8")
+            #print(payload_received)
             for j in range(7, len(payload_received)):
                 if payload_received[j] == ',':
                     # print(i)
@@ -118,20 +164,40 @@ def on_message(client, userdata, msg):
 
             headers = {'Content-type': 'text/plain', 'Accept': 'application/json'}                
             status = requests.post(url, headers=headers, data=payload)
-            # print(openhab_item_names[i] + " set to " + payload + ": " + str(status))
+            #print(openhab_item_names[i] + " set to " + payload + ": " + str(status))
             status_str = str(status)
             if status_str[len(status_str) - 5:len(status_str) - 2] != "200":
                 print(openhab_item_names[i] + " set to " + payload + ": " + str(status))
                 # print("Error status is " + str(status_str))
+            if openhab_item_names[i] == 'Luminance_Sensor_Luminance_1':
+                url = localhost_url + 'Solar_radiation_1'
+                headers = {'Content-type': 'text/plain', 'Accept': 'application/json'}
+                payload = str(round(int(payload) * 0.0079,2))
+                #print("solar radiation 1 " + payload)
+                status = requests.post(url, headers=headers, data=payload)
+                # print(openhab_item_names[i] + " set to " + payload + ": " + str(status))
+                status_str = str(status)
             
+            if openhab_item_names[i] == 'Luminance_Sensor_Luminance_2':
+                url = localhost_url + 'Solar_radiation_2'
+                headers = {'Content-type': 'text/plain', 'Accept': 'application/json'}
+                payload = str(round(int(payload) * 0.0079,2))
+                #print("solar radiation 2 " + payload)
+                status = requests.post(url, headers=headers, data=payload)
+                # print(openhab_item_names[i] + " set to " + payload + ": " + str(status))
+                status_str = str(status)
+                
             for j in range(0, len(timestamps_items)):
                 if openhab_item_names[i] == timestamps_items[j]:
                     url = localhost_url + timestamps_list[j]
-                    payload = str(datetime.now())
-                    print(payload + openhab_item_names[i])
+                    now = datetime.now()
+                    payload = now.strftime("%Y-%m-%d %H:%M:%S")
+                    #print(payload + openhab_item_names[i])
                     status = requests.post(url, headers=headers, data=payload)
                     # print(openhab_item_names[i] + " set to " + payload + ": " + str(status))
                     status_str = str(status)
+    
+                            
                 
 
 
@@ -153,6 +219,7 @@ client.connect("fb06b8022fb941089214e0f7b7025453.s1.eu.hivemq.cloud",
 # subscribe to the topics
 for i in range(len(column)):
     client.subscribe(column[i])
+client.subscribe('casenio/event/f8f005d87424/39/15/JSON')
 
 # publish Data to the topic "my/LEDControl1_Switch"
 # client.publish("casenio/event/f8f005d87424/16/302/JSON",

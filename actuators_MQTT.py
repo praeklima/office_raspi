@@ -84,7 +84,7 @@ while True:
                 openhab_values[i] = value
                 value = '{"value": "'+ value+ '"}'
                 client.publish(column[i], value)
-                print(openhab_item_names[i] + column[i] + value)
+                #print(openhab_item_names[i] + column[i] + value)
         else:
             #print(value)
             if (value != openhab_values[i]):
@@ -95,12 +95,12 @@ while True:
                     else:
                         value = '{"value": "1"}'
                     client.publish(column[i], value)
-                    print(openhab_item_names[i] + column[i] + value)
+                    #print(openhab_item_names[i] + column[i] + value)
                 else:
                     openhab_values[i] = 'OFF'
                     value = '{"value": "0"}'
                     client.publish(column[i], value)
-                    print(openhab_item_names[i] + column[i] + value)
+                    #print(openhab_item_names[i] + column[i] + value)
            
         #print(value)
         #client.publish(column[i], value)
