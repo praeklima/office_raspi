@@ -126,10 +126,10 @@ while True:
         if 600 <= int(current_time) <= 1900:
             #print(" Lunos Mode active time ", int(current_time))
             #Artifitial lighting control
-            if lux_inside < 500:
-                openhab_data_access.openhab_send_command(localhost_url, 'Socket_Switch_51', 'ON')
-            elif lux_inside > 6000:
-                openhab_data_access.openhab_send_command(localhost_url, 'Socket_Switch_51', 'OFF')
+            #if lux_inside < 500:
+            #    openhab_data_access.openhab_send_command(localhost_url, 'Socket_Switch_51', 'ON')
+            #elif lux_inside > 6000:
+            #    openhab_data_access.openhab_send_command(localhost_url, 'Socket_Switch_51', 'OFF')
             
             #Lunos Ventilation mode control as per occupency currently 0.5
             if int(current_time)%100 < 41:
@@ -137,7 +137,7 @@ while True:
             else:
                 com = openhab_data_access.openhab_send_command(localhost_url, 'Lunos_Ventilation_Mode', '0')
         else:
-            openhab_data_access.openhab_send_command(localhost_url, 'Socket_Switch_51', 'OFF')
+            #openhab_data_access.openhab_send_command(localhost_url, 'Socket_Switch_51', 'OFF')
             #print(" Lunos Mode inactive time") 
             if int(current_time)%100 < 2:
                 com = openhab_data_access.openhab_send_command(localhost_url, 'Lunos_Ventilation_Mode', '1')
