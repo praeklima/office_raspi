@@ -149,6 +149,10 @@ while True:
             com = openhab_data_access.openhab_send_command(localhost_url, 'Lunos_Ventilation_Heat_Recovery_mode', '2')
         else:
             com = openhab_data_access.openhab_send_command(localhost_url, 'Lunos_Ventilation_Heat_Recovery_mode', '1')
+    
+    elif control_Algorithm == "RL_V1":
+        sys.stdout.write("\r")
+        print("Control Algorithm is RL_V1", end='', flush=True)
         
 
 
