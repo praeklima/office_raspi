@@ -9,7 +9,7 @@ count = 0
 
 while 1:
     vt12 = float(openhab_data_access.openhab_read_data(cloud_api_url, 'Brightness_sensor_temperature_1'))
-    vt13 = float(openhab_data_access.openhab_read_data(cloud_api_url, 'Brightness_Sensor_Temperature_2'))
+    #vt13 = float(openhab_data_access.openhab_read_data(cloud_api_url, 'Brightness_Sensor_Temperature_2'))
     vt20 = float(openhab_data_access.openhab_read_data(cloud_api_url, 'AirQualitySensor_SensorTemperature'))
     vt25 = float(openhab_data_access.openhab_read_data(cloud_api_url, 'Temperature_25'))
     vt26 = float(openhab_data_access.openhab_read_data(cloud_api_url, 'Temperature_26'))
