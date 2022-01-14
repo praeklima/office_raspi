@@ -59,7 +59,7 @@ while True:
         summer_winter_flap = openhab_data_access.openhab_read_data(localhost_url, 'Ventilation_Flap_switch')
 
         lux_inside = int(openhab_data_access.openhab_read_data(localhost_url, 'Luminance_Sensor_Luminance_2'))
-        lux_outside = int(openhab_data_access.openhab_read_data(localhost_url, 'Luminance_Sensor_Luminance_1'))
+        lux_outside = float(openhab_data_access.openhab_read_data(localhost_url, 'Luminance_Sensor_Luminance_1'))
         lux_min = 500
         lux_max = 3000
 
