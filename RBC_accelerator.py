@@ -64,7 +64,7 @@ while True:
         lux_max = 3000
 
         Heater = openhab_data_access.openhab_read_data(localhost_url, 'Socket_Switch_2')
-        CO2 = int(openhab_data_access.openhab_read_data(localhost_url, 'AirQualitySensor_SensorCO2'))
+        CO2 = int(float(openhab_data_access.openhab_read_data(localhost_url, 'AirQualitySensor_SensorCO2')))
 
         # Blinds RBC Algorithm
         if occupancy == 'OFF':
