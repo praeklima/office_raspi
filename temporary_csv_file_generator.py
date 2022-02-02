@@ -95,10 +95,25 @@ while True:     # infinite loop
     for i in range(2, len(column)):
         if(column[i] == 'Switch_3_AND_4'):
             url = localhost_url + 'Socket_Switch_3' + "/state"  # accessing data from items
-            res = requests.get(url)
+            try:
+                res = requests.get(url)
+                value = res.text
+            except requests.exceptions.ConnectionError:
+                now = datetime.now()
+                sys.stdout.write("\r")
+                
+                print("HTTP Openhab server exception occered", now.strftime("%Y-%m-%d"), now.strftime("%H:%M:%S"), end='', flush=True)
+                value = "ON"
             value_3 = res.text
             url = localhost_url + 'Socket_Switch_4' + "/state"  # accessing data from items
-            res = requests.get(url)
+            try:
+                res = requests.get(url)
+                value = res.text
+            except requests.exceptions.ConnectionError:
+                now = datetime.now()
+                sys.stdout.write("\r")
+                print("HTTP Openhab server exception occered", now.strftime("%Y-%m-%d"), now.strftime("%H:%M:%S"), end='', flush=True)
+                value = "ON"
             value_4 = res.text
             if value_3 == 'ON' and value_4 == 'ON':
                 value = 'ON'
@@ -107,8 +122,15 @@ while True:     # infinite loop
             #print('value_3 = ',value_3,'; value_4 = ',value_4, 'AND =', value)
         else:
             url = localhost_url + column[i] + "/state"  # accessing data from items
-            res = requests.get(url)
-            value = res.text
+            try:
+                res = requests.get(url)
+                value = res.text
+            except requests.exceptions.ConnectionError:
+                now = datetime.now()
+                sys.stdout.write("\r")
+                print("HTTP Openhab server exception occered", now.strftime("%Y-%m-%d"), now.strftime("%H:%M:%S"), end='', flush=True)
+                value = "20.0124"
+                
             if 1 < i < 8 or i == 21 or i == 29:    # Removing units from the data
                 value = value[:len(value) - 4]
             elif 14 < i < 21:

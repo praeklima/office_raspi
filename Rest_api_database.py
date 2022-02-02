@@ -88,8 +88,14 @@ while True:     # infinite loop
     row_data = [now.strftime("%Y-%m-%d"), now.strftime("%H:%M:%S")]  # time stamp for data collection
     for i in range(2, len(column)):
         url = localhost_url + column[i] + "/state"  # accessing data from items
-        res = requests.get(url)
-        value = res.text
+        try:
+            res = requests.get(url)
+            value = res.text
+        except requests.exceptions.ConnectionError:
+            now = datetime.now()
+            print("HTTP Openhab server exception occered", now.strftime("%Y-%m-%d"), now.strftime("%H:%M:%S"))
+            value = "20.0124"
+            
         if 1 < i < 8 or i == 21 or i == 29:    # Removing units from the data
             value = value[:len(value) - 4]
         elif 14 < i < 21:

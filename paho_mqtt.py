@@ -141,6 +141,8 @@ def on_message(client, userdata, msg):
     print(now.strftime("%Y-%m-%d %H:%M:%S"), end='', flush=True)
     #print("Received message: " + msg.topic + " -> " + msg.payload.decode("utf-8"))
     #print("Received message: " + msg.topic + " -> " + msg.payload.decode("utf-8"), end='', flush=True)
+    #if msg.topic =='casenio/event/f8f005d87424/16/4/JSON' or msg.topic =='casenio/event/f8f005d87424/16/200/JSON' or msg.topic =='casenio/event/f8f005d87424/16/302/JSON':
+        #print(msg.payload.decode("utf-8"))
     
     if msg.topic == 'casenio/event/f8f005d87424/50/1/JSON':
         payload_received = msg.payload.decode("utf-8")

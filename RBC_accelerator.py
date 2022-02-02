@@ -8,7 +8,7 @@ cloud_api_url = "https://praeklimatud%40gmail.com:praeklima_tud@2021@home.myopen
 localhost_url = "http://localhost:8080/rest/items/"
 
 while True:
-    time.sleep(5)
+    
     control_Algorithm = openhab_data_access.openhab_read_data(localhost_url, 'Control_Algorithm')
     #print(control_Algorithm)
     if control_Algorithm == "Manual":
@@ -38,12 +38,12 @@ while True:
         RHout = round((vh40 + vh22 + vh21 + vh14)/4, 2)
 
         vt12 = float(openhab_data_access.openhab_read_data(localhost_url, 'Brightness_sensor_temperature_1'))
-        vt13 = float(openhab_data_access.openhab_read_data(localhost_url, 'Brightness_Sensor_Temperature_2'))
+        #vt13 = float(openhab_data_access.openhab_read_data(localhost_url, 'Brightness_Sensor_Temperature_2'))
         vt20 = float(openhab_data_access.openhab_read_data(localhost_url, 'AirQualitySensor_SensorTemperature'))
         vt25 = float(openhab_data_access.openhab_read_data(localhost_url, 'Temperature_25'))
-        vt26 = float(openhab_data_access.openhab_read_data(localhost_url, 'Temperature_26'))
+        vt27 = float(openhab_data_access.openhab_read_data(localhost_url, 'Temperature_27'))
         vt24 = float(openhab_data_access.openhab_read_data(localhost_url, 'Weather_Station_Temperature_2'))
-        Tin = round((vt12 + vt13 + vt20 + vt25 + vt26 + vt24)/6, 2)
+        Tin = round((vt12 + vt20 + vt25 + vt27 + vt24)/5, 2)
 
         vh20 = float(openhab_data_access.openhab_read_data(localhost_url, 'AirQualitySensor_SensorRelativeHumidity'))
         vh24 = float(openhab_data_access.openhab_read_data(localhost_url, 'Weather_Station_Humidity_2'))
@@ -58,7 +58,7 @@ while True:
         Tlow = 21
         summer_winter_flap = openhab_data_access.openhab_read_data(localhost_url, 'Ventilation_Flap_switch')
 
-        lux_inside = int(openhab_data_access.openhab_read_data(localhost_url, 'Luminance_Sensor_Luminance_2'))
+        lux_inside = int(float(openhab_data_access.openhab_read_data(localhost_url, 'Luminance_Sensor_Luminance_2')))
         lux_outside = float(openhab_data_access.openhab_read_data(localhost_url, 'Luminance_Sensor_Luminance_1'))
         lux_min = 500
         lux_max = 3000
@@ -153,7 +153,7 @@ while True:
     elif control_Algorithm == "RL_V1":
         sys.stdout.write("\r")
         print("Control Algorithm is RL_V1", end='', flush=True)
-        
+    time.sleep(5)   
 
 
 
