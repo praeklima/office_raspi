@@ -70,25 +70,25 @@ while True:
         if occupancy == 'OFF':
             if 600 <= int(current_time) <= 1900:
                 if Heater == 'ON':
-                    com = openhab_data_access.openhab_send_command(localhost_url, 'Window_blinds', '99')
-                else:
                     com = openhab_data_access.openhab_send_command(localhost_url, 'Window_blinds', '0')
+                else:
+                    com = openhab_data_access.openhab_send_command(localhost_url, 'Window_blinds', '99')
             else:
                 if Heater == 'ON':
-                    com = openhab_data_access.openhab_send_command(localhost_url, 'Window_blinds', '0')
-                else:
                     com = openhab_data_access.openhab_send_command(localhost_url, 'Window_blinds', '99')
+                else:
+                    com = openhab_data_access.openhab_send_command(localhost_url, 'Window_blinds', '0')
         else:
             if lux_outside <= lux_max:
-                com = openhab_data_access.openhab_send_command(localhost_url, 'Window_blinds', '99')
+                com = openhab_data_access.openhab_send_command(localhost_url, 'Window_blinds', '0')
                 time.sleep(30)
                 com1 = openhab_data_access.openhab_send_command(localhost_url, 'Slats_angle', '45')
             elif 10000 > lux_outside > 3000:
-                com = openhab_data_access.openhab_send_command(localhost_url, 'Window_blinds', '0')
+                com = openhab_data_access.openhab_send_command(localhost_url, 'Window_blinds', '99')
                 time.sleep(30)
                 com1 = openhab_data_access.openhab_send_command(localhost_url, 'Slats_angle', '45')
             else:
-                com = openhab_data_access.openhab_send_command(localhost_url, 'Window_blinds', '0')
+                com = openhab_data_access.openhab_send_command(localhost_url, 'Window_blinds', '99')
                 time.sleep(30)
                 com1 = openhab_data_access.openhab_send_command(localhost_url, 'Slats_angle', '99')
 
