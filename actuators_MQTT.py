@@ -110,9 +110,9 @@ while True:
                 #print(openhab_item_names[i], value, openhab_values[i])
                 openhab_values[i] = value
                 if openhab_item_names[i] == 'Ventilation_Flap' and value == 'Summer':
-                    value1 = '{"value": "'+ '99'+ '"}'
-                elif openhab_item_names[i] == 'Ventilation_Flap' and (value == 'Winter' or value == 'NULL'):
                     value1 = '{"value": "'+ '0'+ '"}'
+                elif openhab_item_names[i] == 'Ventilation_Flap' and (value == 'Winter' or value == 'NULL'):
+                    value1 = '{"value": "'+ '99'+ '"}'
                 else:
                     value = float(value)
                     value = int(value)
